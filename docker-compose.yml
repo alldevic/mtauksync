@@ -53,6 +53,41 @@ services:
       private_network:
         ipv4_address: 172.16.0.6
 
+  qcluster:
+    image: mtauksync_backend
+    container_name: mtauksync_qcluster
+    env_file: .env
+    user: ${CURRENT_UID}
+    volumes:
+      - ./backend:/app/
+      - ./static:/app/static
+    restart: on-failure
+    entrypoint: python3
+    command: ./manage.py qcluster
+    depends_on:
+      - backend
+      - postgres
+    networks:
+      private_network:
+        ipv4_address: 172.16.0.7
+
+  qcluster-dev:
+    image: mtauksync_backend-dev
+    container_name: mtauksync_qcluster_dev
+    env_file: .env
+    user: ${CURRENT_UID}
+    volumes:
+      - ./backend:/app/
+      - ./static:/app/static
+    restart: on-failure
+    entrypoint: python3
+    command: ./manage.py qcluster
+    depends_on:
+      - postgres
+    networks:
+      private_network:
+        ipv4_address: 172.16.0.7
+
 networks:
   private_network:
     ipam:
