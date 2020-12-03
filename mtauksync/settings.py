@@ -41,7 +41,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'user_profile.apps.UserProfileConfig',
-    'initcmds'
+    'initcmds',
+    'mt_client'
 ]
 
 if DEBUG:
