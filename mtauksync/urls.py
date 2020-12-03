@@ -31,7 +31,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', admin.site.urls),
     path(f'{prefix}auth/', include('djoser.urls.authtoken')),
     path(prefix, schema_view.with_ui('swagger',
                                      cache_timeout=0), name='docs-ui'),
