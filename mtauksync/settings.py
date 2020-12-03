@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'drf_yasg',
+    'django_q',
 ]
 
 LOCAL_APPS = [
@@ -186,4 +187,15 @@ LOGGING = {
             'propagate': False,
         },
     },
+}
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 2,
+    'retry': 360,
+    'timeout': 300,
+    'queue_limit': 50,
+    'bulk': 10,
+    'ack_failures': True,
+    'orm': 'default'
 }
