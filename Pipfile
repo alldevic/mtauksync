@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==3.1.4"
+djangorestframework = "==3.12.2"
+drf-yasg = "==1.20.0"
+djoser = "==2.0.5"
+psycopg2-binary = "==2.8.5"
+uvicorn = "==0.12.3"
+
+[dev-packages]
+flake8 = "*"
+autopep8 = "*"
+rope = "*"
+debugpy = "*"
+django-silk = "*"
+drf-generators = "*"
+
+[requires]
+python_version = "3.8"
