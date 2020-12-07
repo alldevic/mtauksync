@@ -104,6 +104,17 @@ DATABASES = {
         'PASSWORD': get_env('POSTGRES_PASSWORD', 'mysecretpass'),
         'HOST': get_env('POSTGRES_HOST', 'localhost'),
         'PORT': 5432
+    },
+    'mtdb': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_env('MT_MYSQL_DB', 'mt_db'),
+        'USER': get_env('MT_MYSQL_USER', 'mtuser'),
+        'PASSWORD': get_env('MT_MYSQL_PASSWORD', 'mtpass'),
+        'HOST': get_env('MT_MYSQL_HOST', 'localhost'),
+        'PORT': 3306,
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
@@ -202,3 +213,5 @@ Q_CLUSTER = {
     'ack_failures': True,
     'orm': 'default'
 }
+
+AUK_TOKEN = get_env('AUK_TOKEN', "testtoken")
