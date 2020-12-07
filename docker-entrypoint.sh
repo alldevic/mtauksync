@@ -48,6 +48,38 @@ done
 
 echo >&2 "Postgres is up - continuing..."
 
+function mt_mysql_ready() {
+    python3 <<END
+import sys
+from MySQLdb import _mysql
+from os import environ
+def get_env(key, default=None):
+    val = environ.get(key, default)
+    if val == 'True':
+        val = True
+    elif val == 'False':
+        val = False
+    return val
+try:
+    dbname = get_env('MT_MYSQL_DB')
+    user = get_env('MT_MYSQL_USER')
+    password = get_env('MT_MYSQL_PASSWORD')
+    host = get_env('MT_MYSQL_HOST')
+    port = 3306
+    conn = _mysql.connect(dbname=dbname, user=user, passwd=password, host=host, port=port)
+except:
+    sys.exit(-1)
+sys.exit(0)
+END
+}
+
+until postgres_ready; do
+    echo >&2 "MT MySQL is unavailable - sleeping"
+    sleep 1
+done
+
+echo >&2 "MT MySQL is up - continuing..."
+
 echo >&2 "Migrating..."
 python3 manage.py migrate
 
