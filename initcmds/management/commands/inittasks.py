@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 schedule_type=Schedule.MINUTES,
                 minutes=5
             )
-        # # Create mt task
+        # Create mt task
         try:
             Schedule.objects.get(name="mt_post")
         except ObjectDoesNotExist:
