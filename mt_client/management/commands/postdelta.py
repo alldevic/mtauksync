@@ -44,13 +44,13 @@ class Command(BaseCommand):
         # Post delta
         if mt_data:
             replicationauk.objects.using('mtdb').bulk_create(mt_data)
+            TaskModel.objects.create(
+                taskname="postdelta",
+                lastrunned=start_date
+            )
         else:
             self.stdout.write(self.style.SUCCESS("No data"))
         # Create new task info
-        TaskModel.objects.create(
-            taskname="postdelta",
-            lastrunned=start_date
-        )
 
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(
