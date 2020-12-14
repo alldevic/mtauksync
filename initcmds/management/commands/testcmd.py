@@ -5,4 +5,4 @@ class Command(BaseCommand):
     help = 'Отправка тестового сообщения'
 
     def handle(self, *args, **options):
-        print("test")
+        self.stdout.write(self.style.SUCCESS("Test"))

@@ -42,8 +42,10 @@ class Command(BaseCommand):
                                    essence="platform",
                                    dt=x.updated) for x in db_platforms]
         # Post delta
-        replicationauk.objects.using('mtdb').bulk_create(mt_data)
-
+        if mt_data:
+            replicationauk.objects.using('mtdb').bulk_create(mt_data)
+        else:
+            self.stdout.write(self.style.SUCCESS("No data"))
         # Create new task info
         TaskModel.objects.create(
             taskname="postdelta",
