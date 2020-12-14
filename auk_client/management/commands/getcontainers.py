@@ -5,7 +5,7 @@ from auk_client.models import Container
 from initcmds.models import TaskModel
 import requests
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.utils import timezone
 
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
         except:
             last_task = TaskModel.objects.create(
                 taskname="getcontainers",
-                lastrunned=datetime.now() - timedelta(days=30)
+                lastrunned=timezone.now() - timedelta(days=30)
             )
 
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))

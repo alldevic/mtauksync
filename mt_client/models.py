@@ -1,5 +1,11 @@
 from django.db import models
 
+ACTIONS = (
+    ('insert', 'insert'),
+    ('update', 'update'),
+    ('delete', 'delete'),
+)
+
 
 class replicationauk(models.Model):
     #     CREATE TABLE replicationauk (
@@ -14,9 +20,11 @@ class replicationauk(models.Model):
 
     id_auk = models.BigIntegerField()
     id_mt = models.BigIntegerField()
+    action = models.CharField(max_length=20, choices=ACTIONS)
     essence = models.CharField(max_length=50)
     dt = models.DateTimeField(auto_now=False, auto_now_add=False)
     comment = models.CharField(max_length=150)
 
     class Meta:
         managed = False
+        db_table = 'replicationauk'
