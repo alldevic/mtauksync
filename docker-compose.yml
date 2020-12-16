@@ -16,6 +16,8 @@ services:
     volumes:
       - ./static:/app/static/
       - .:/app/
+    ports:
+      - 80:8000
     networks:
       # proxy:
       private_network:
