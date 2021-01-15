@@ -1,15 +1,27 @@
 from django.contrib import admin
+from django.utils.html import escape, mark_safe
+
 from mt_client.models import replicationauk
 
 
 @admin.register(replicationauk)
 class ReplicationAdmin(admin.ModelAdmin):
-    list_display = ('id_auk', 'id_mt', 'action', 'essence', 'dt',)
+    list_display = ('id', 'id_auk_link', 'id_mt', 'action', 'essence', 'dt',)
     list_filter = ('action', 'essence',)
     search_fields = ('id_mt', 'id_auk',)
     fields = ('id_auk',)
     # A handy constant for the name of the alternate database.
     using = 'mtdb'
+
+    def id_auk_link(self, obj: replicationauk):
+        if obj:
+            if obj.essence == 'platform':
+                return mark_safe(f'<a href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
+                {escape(obj.id_auk)}</a>')
+            else:
+                return obj.id_auk
+        else:
+            return None
 
     def save_model(self, request, obj, form, change):
         # Tell Django to save objects to the 'other' database.
