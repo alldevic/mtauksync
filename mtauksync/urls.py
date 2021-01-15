@@ -6,8 +6,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-admin.site.site_header = "Адмнистрирование mtauksync"
-admin.site.site_title = "Адмнистрирование mtauksync"
+admin.site.site_header = "Администрирование mtauksync"
+admin.site.site_title = "Администрирование mtauksync"
 admin.site.index_title = "mtauksync"
 
 ver_tag = 'v1'
