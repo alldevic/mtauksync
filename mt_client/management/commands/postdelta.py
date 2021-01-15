@@ -1,7 +1,8 @@
-from django.core.management.base import BaseCommand
-from auk_client.models import (Container, Platform)
-from mt_client.models import replicationauk
 import time
+
+from auk_client.models import Container, Platform
+from django.core.management.base import BaseCommand
+from mt_client.models import replicationauk
 
 
 class Command(BaseCommand):

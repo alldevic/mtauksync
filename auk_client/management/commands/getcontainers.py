@@ -1,12 +1,13 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
-from requests.auth import AuthBase
-from auk_client.models import Container
-from initcmds.models import TaskModel
-import requests
 import time
 from datetime import timedelta
+
+import requests
+from auk_client.models import Container
+from django.conf import settings
+from django.core.management.base import BaseCommand
 from django.utils import timezone
+from initcmds.models import TaskModel
+from requests.auth import AuthBase
 
 
 class Command(BaseCommand):

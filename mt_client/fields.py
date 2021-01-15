@@ -1,6 +1,7 @@
-from django.db import models
-from time import strftime
 from datetime import datetime
+from time import strftime
+
+from django.db import models
 
 
 class UnixTimestampField(models.DateTimeField):
