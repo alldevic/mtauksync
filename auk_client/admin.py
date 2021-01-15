@@ -37,8 +37,9 @@ class ContainerAdmin(admin.ModelAdmin):
     def auk_id_link(self, obj: Container):
         if obj:
             if obj.auk_platform_id:
-                return mark_safe(f'<a href="http://auk.kuzro.ru/platform/{obj.auk_platform_id}/{obj.auk_id}">\
-                {escape(obj.auk_id)}</a>')
+                return mark_safe(f'<a target="_blank" \
+href="http://auk.kuzro.ru/platform/{obj.auk_platform_id}/{obj.auk_id}">\
+{escape(obj.auk_id)}</a>')
             else:
                 return obj.auk_id
         else:

@@ -17,14 +17,16 @@ class ReplicationAdmin(admin.ModelAdmin):
     def id_auk_link(self, obj: replicationauk):
         if obj:
             if obj.essence == 'platform':
-                return mark_safe(f'<a href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
+                return mark_safe(f'<a target="_blank" \
+href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
                 {escape(obj.id_auk)}</a>')
             elif obj.essence == 'container':
                 container = Container.objects.filter(auk_id=obj.id_auk).first()
                 if not container:
                     return obj.id_auk
                 if container.auk_platform_id:
-                    return mark_safe(f'<a href="http://auk.kuzro.ru/platform/\
+                    return mark_safe(f'<a target="_blank" \
+href="http://auk.kuzro.ru/platform/\
     {container.auk_platform_id}/{container.auk_id}">{escape(obj.id_auk)}</a>')
                 else:
                     return obj.id_auk
