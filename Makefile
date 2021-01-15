@@ -30,7 +30,9 @@ migrations:
 	docker exec -it /$(BACKEND_CONTAINER) python3 manage.py makemigrations
 su:
 	docker exec -it /$(BACKEND_CONTAINER) python3 manage.py createsuperuser
-logs:
+blogs:
 	docker logs /$(BACKEND_CONTAINER) -f
+logs:
+	docker-compose logs -f
 volumes:
 	docker volume create mtauksync_db_data
