@@ -16,11 +16,15 @@ class Command(BaseCommand):
         # Calculate delta
         mt_data = [replicationauk(id_auk=x.id,
                                   action='update',
+                                  # owner='auk',
+                                  # attribute=x.raw_json,
                                   essence="container",
                                   dt=x.updated) for x in db_containers]
         mt_data += [replicationauk(id_auk=x.id,
                                    id_mt=x.mt_id,
                                    action='update' if x.mt_id else "insert",
+                                   # owner='auk',
+                                   # attribute=x.raw_json,
                                    essence="platform",
                                    dt=x.updated) for x in db_platforms]
         # Post delta
