@@ -33,7 +33,8 @@ class Command(BaseCommand):
         db_platforms = [Platform(auk_id=platform["id"],
                                  mt_id=platform["ext_id"],
                                  created=platform["datetime_create"],
-                                 updated=platform["datetime_update"])
+                                 updated=platform["datetime_update"],
+                                 raw_json=platform)
                         for platform in platforms]
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(
