@@ -62,7 +62,7 @@ class replicationauk21(models.Model):
     dt = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
     dtupdate = UnixTimestampField()
     comment = models.CharField(max_length=150)
-    attribute = models.JSONField(null=True)
+    attribute = models.JSONField(null=True, blank=True)
 
     class Meta:
         managed = False

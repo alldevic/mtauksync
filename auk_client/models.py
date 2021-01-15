@@ -26,6 +26,7 @@ class Platform(models.Model):
         "Created", auto_now=False, auto_now_add=False, null=True, blank=True)
     updated = models.DateTimeField(
         "Updated", auto_now=False, auto_now_add=False, null=True, blank=True)
+    raw_json = models.JSONField(null=True, blank=True)
 
     class Meta:
         verbose_name = "платформа"
