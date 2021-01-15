@@ -48,19 +48,20 @@ class Command(BaseCommand):
             )
 
         # Create or update mt task
-        try:
-            task = Schedule.objects.get(name='mt_post')
-            task.next_run = timezone.now()+timedelta(minutes=1)
-            if task.minutes != int(settings.MT_PERIOD):
-                task.minutes = int(settings.MT_PERIOD)
-            task.save()
-        except ObjectDoesNotExist:
-            self.stdout.write(self.style.SUCCESS('Create mt_post'))
-            Schedule.objects.create(
-                name='mt_post',
-                func='django.core.management.call_command',
-                args='"postdelta"',
-                schedule_type=Schedule.MINUTES,
-                minutes=settings.MT_PERIOD,
-                next_run=timezone.now()+timedelta(minutes=1)
-            )
+        if not settings.DEBUG:
+            try:
+                task = Schedule.objects.get(name='mt_post')
+                task.next_run = timezone.now()+timedelta(minutes=1)
+                if task.minutes != int(settings.MT_PERIOD):
+                    task.minutes = int(settings.MT_PERIOD)
+                task.save()
+            except ObjectDoesNotExist:
+                self.stdout.write(self.style.SUCCESS('Create mt_post'))
+                Schedule.objects.create(
+                    name='mt_post',
+                    func='django.core.management.call_command',
+                    args='"postdelta"',
+                    schedule_type=Schedule.MINUTES,
+                    minutes=settings.MT_PERIOD,
+                    next_run=timezone.now()+timedelta(minutes=1)
+                )

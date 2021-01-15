@@ -34,7 +34,9 @@ class Command(BaseCommand):
         db_containers = [Container(auk_id=container["id"],
                                    mt_id=container["ext_id"],
                                    created=container["datetime_create"],
-                                   updated=container["datetime_update"])
+                                   updated=container["datetime_update"],
+                                   auk_platform_id=container["platform"]["id"],
+                                   raw_json=container)
                          for container in containers]
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(

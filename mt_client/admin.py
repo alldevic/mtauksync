@@ -1,3 +1,4 @@
+from auk_client.models import Container
 from django.contrib import admin
 from django.utils.html import escape, mark_safe
 
@@ -18,6 +19,15 @@ class ReplicationAdmin(admin.ModelAdmin):
             if obj.essence == 'platform':
                 return mark_safe(f'<a href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
                 {escape(obj.id_auk)}</a>')
+            elif obj.essence == 'container':
+                container = Container.objects.filter(auk_id=obj.id_auk).first()
+                if not container:
+                    return obj.id_auk
+                if container.auk_platform_id:
+                    return mark_safe(f'<a href="http://auk.kuzro.ru/platform/\
+    {container.auk_platform_id}/{container.auk_id}">{escape(obj.id_auk)}</a>')
+                else:
+                    return obj.id_auk
             else:
                 return obj.id_auk
         else:
