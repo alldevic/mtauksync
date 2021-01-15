@@ -22,7 +22,8 @@ class Command(BaseCommand):
         except:
             last_task = TaskModel.objects.create(
                 taskname="getcontainers",
-                lastrunned=timezone.now() - timedelta(days=30)
+                lastrunned=timezone.now() - timedelta(
+                    days=int(settings.FIRST_RUN_DAYS))
             )
 
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
