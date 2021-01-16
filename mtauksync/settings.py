@@ -222,7 +222,8 @@ Q_CLUSTER = {
     'orm': 'default'
 }
 
-AUK_TOKEN = get_env('AUK_TOKEN', "testtoken")
+AUK_LOGIN = get_env('AUK_LOGIN', "login@login.ru")
+AUK_PASS = get_env('AUK_PASS', "secretpass")
 
 AUK_PLATFORM_PERIOD = get_env('AUK_PLATFORM_PERIOD', 5)
 AUK_CONTAINER_PERIOD = get_env('AUK_CONTAINER_PERIOD', 5)
