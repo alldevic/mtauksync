@@ -22,6 +22,8 @@ DEBUG = get_env('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
+ENABLE_MT_SYNC = get_env('ENABLE_MT_SYNC', False)
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,10 +43,12 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'user_profile.apps.UserProfileConfig',
-    'mt_client',
     'initcmds',
     'auk_client'
 ]
+
+if ENABLE_MT_SYNC:
+    LOCAL_APPS = ['mt_client'] + LOCAL_APPS
 
 if DEBUG:
     # Silk
@@ -105,18 +109,22 @@ DATABASES = {
         'HOST': get_env('POSTGRES_HOST', 'localhost'),
         'PORT': 5432
     },
-    'mtdb': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': get_env('MT_MYSQL_DB', 'mt_db'),
-        'USER': get_env('MT_MYSQL_USER', 'mtuser'),
-        'PASSWORD': get_env('MT_MYSQL_PASSWORD', 'mtpass'),
-        'HOST': get_env('MT_MYSQL_HOST', 'localhost'),
-        'PORT': 3306,
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
 }
+
+if ENABLE_MT_SYNC:
+    DATABASES.update({
+        'mtdb': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': get_env('MT_MYSQL_DB', 'mt_db'),
+            'USER': get_env('MT_MYSQL_USER', 'mtuser'),
+            'PASSWORD': get_env('MT_MYSQL_PASSWORD', 'mtpass'),
+            'HOST': get_env('MT_MYSQL_HOST', 'localhost'),
+            'PORT': 3306,
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            }
+        }
+    })
 
 AUTH_PASSWORD_VALIDATORS = []
 
@@ -222,5 +230,3 @@ MT_PERIOD = get_env('MT_PERIOD', 3)
 
 
 FIRST_RUN_DAYS = get_env('FIRST_RUN_DAYS', 30)
-
-ENABLE_MT_SYNC = get_env('ENABLE_MT_SYNC', False)
