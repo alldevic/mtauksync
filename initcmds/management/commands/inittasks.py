@@ -48,15 +48,19 @@ class Command(BaseCommand):
             )
 
         # Create or update mt task
-        if not settings.DEBUG:
-            try:
-                task = Schedule.objects.get(name='mt_post')
+
+        try:
+            task = Schedule.objects.get(name='mt_post')
+            if settings.ENABLE_MT_SYNC:
                 task.next_run = timezone.now()+timedelta(minutes=1)
                 if task.minutes != int(settings.MT_PERIOD):
                     task.minutes = int(settings.MT_PERIOD)
                 task.save()
-            except ObjectDoesNotExist:
-                self.stdout.write(self.style.SUCCESS('Create mt_post'))
+            else:
+                task.delete()
+        except ObjectDoesNotExist:
+            self.stdout.write(self.style.SUCCESS('Create mt_post'))
+            if settings.ENABLE_MT_SYNC:
                 Schedule.objects.create(
                     name='mt_post',
                     func='django.core.management.call_command',

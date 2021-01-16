@@ -222,3 +222,5 @@ MT_PERIOD = get_env('MT_PERIOD', 3)
 
 
 FIRST_RUN_DAYS = get_env('FIRST_RUN_DAYS', 30)
+
+ENABLE_MT_SYNC = get_env('ENABLE_MT_SYNC', False)
