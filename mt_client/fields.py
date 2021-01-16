@@ -9,15 +9,15 @@ class UnixTimestampField(models.DateTimeField):
     database as a TIMESTAMP field rather than the usual DATETIME field.
     """
 
-    def __init__(self, null=False, blank=False, **kwargs):
-        super(UnixTimestampField, self).__init__(**kwargs)
+    def __init__(self, null=False, blank=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         # default for TIMESTAMP is NOT NULL unlike most fields, so we have to
         # cheat a little:
         self.blank, self.isnull = blank, null
         # To prevent the framework from shoving in "not null".
         self.null = True
 
-    def db_type(self):
+    def db_type(self, connection):
         typ = ['TIMESTAMP']
         # See above!
         if self.isnull:
@@ -29,7 +29,7 @@ class UnixTimestampField(models.DateTimeField):
     def to_python(self, value):
         return datetime.from_timestamp(value)
 
-    def get_db_prep_value(self, value):
+    def get_db_prep_value(self, value, connection, prepared=False):
         if value is None:
             return None
         return strftime('%Y%m%d%H%M%S', value.timetuple())
