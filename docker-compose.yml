@@ -21,7 +21,7 @@ services:
     networks:
       # proxy:
       private_network:
-        ipv4_address: 172.16.0.8
+        ipv4_address: 172.19.0.8
 
   backend-dev:
     container_name: mtauksync_backend_dev
@@ -42,7 +42,7 @@ services:
       - 8000:8000
     networks:
       private_network:
-        ipv4_address: 172.16.0.5
+        ipv4_address: 172.19.0.5
 
   postgres:
     container_name: mtauksync_postgres
@@ -53,7 +53,7 @@ services:
       - mtauksync_db_data:/var/lib/postgresql/data
     networks:
       private_network:
-        ipv4_address: 172.16.0.6
+        ipv4_address: 172.19.0.6
 
   qcluster:
     image: mtauksync_backend
@@ -70,7 +70,7 @@ services:
       - postgres
     networks:
       private_network:
-        ipv4_address: 172.16.0.7
+        ipv4_address: 172.19.0.7
 
   qcluster-dev:
     image: mtauksync_backend-dev
@@ -86,14 +86,14 @@ services:
       - postgres
     networks:
       private_network:
-        ipv4_address: 172.16.0.9
+        ipv4_address: 172.19.0.9
 
 networks:
   private_network:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.0.0/16
+        - subnet: 172.19.0.0/16
 
 volumes:
   mtauksync_db_data:
