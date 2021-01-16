@@ -23,6 +23,7 @@ DEBUG = get_env('DEBUG', True)
 ALLOWED_HOSTS = ['*']
 
 ENABLE_MT_SYNC = get_env('ENABLE_MT_SYNC', False)
+ENABLE_AUK_SYNC = get_env('ENABLE_AUK_SYNC', False)
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -228,6 +229,7 @@ AUK_PASS = get_env('AUK_PASS', "secretpass")
 AUK_PLATFORM_PERIOD = get_env('AUK_PLATFORM_PERIOD', 5)
 AUK_CONTAINER_PERIOD = get_env('AUK_CONTAINER_PERIOD', 5)
 MT_PERIOD = get_env('MT_PERIOD', 3)
+AUK_PERIOD = get_env('MT_PERIOD', 2)
 
 
 FIRST_RUN_DAYS = get_env('FIRST_RUN_DAYS', 30)

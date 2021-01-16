@@ -48,7 +48,6 @@ class Command(BaseCommand):
             )
 
         # Create or update mt task
-
         try:
             task = Schedule.objects.get(name='mt_post')
             if settings.ENABLE_MT_SYNC:
@@ -65,6 +64,28 @@ class Command(BaseCommand):
                     name='mt_post',
                     func='django.core.management.call_command',
                     args='"postdelta"',
+                    schedule_type=Schedule.MINUTES,
+                    minutes=settings.MT_PERIOD,
+                    next_run=timezone.now()+timedelta(minutes=1)
+                )
+
+        # Create or update auk sync task
+        try:
+            task = Schedule.objects.get(name='auk_post')
+            if settings.ENABLE_AUK_SYNC:
+                task.next_run = timezone.now()+timedelta(minutes=1)
+                if task.minutes != int(settings.AUK_PERID):
+                    task.minutes = int(settings.AUK_PERIOD)
+                task.save()
+            else:
+                task.delete()
+        except ObjectDoesNotExist:
+            self.stdout.write(self.style.SUCCESS('Create auk_post'))
+            if settings.ENABLE_AUK_SYNC:
+                Schedule.objects.create(
+                    name='auk_post',
+                    func='django.core.management.call_command',
+                    args='"aukpost"',
                     schedule_type=Schedule.MINUTES,
                     minutes=settings.MT_PERIOD,
                     next_run=timezone.now()+timedelta(minutes=1)
