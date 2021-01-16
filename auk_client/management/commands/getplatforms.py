@@ -61,7 +61,8 @@ def get_paged(url, next_field, data_field, upd_date):
     print(f"get {url}", end=", ")
 
     s = requests.Session()
-    s.auth = TokenAuth(settings.AUK_TOKEN)
+    s.auth = LogPassAuth("http://apiauk.kuzro.ru/token/login/",
+                         settings.AUK_LOGIN, settings.AUK_PASS)
     print(upd_date.strftime("%Y-%m-%d %H:%M"))
 
     response = s.get(url, params={
@@ -90,5 +91,33 @@ class TokenAuth(AuthBase):
 
     def __call__(self, r):
         """Attach an API token to a custom auth header."""
+        r.headers['Authorization'] = f'Token {self.token}'
+        return r
+
+
+class LogPassAuth(AuthBase):
+    """Implements a custom authentication scheme."""
+
+    def __init__(self, post_url, email, password):
+        self.post_url = post_url
+        self.email = email
+        self.password = password
+        self.token = None
+
+    def __call__(self, r):
+        """Attach an API token to a custom auth header."""
+        if not self.token:
+            response = requests.post(self.post_url, json={
+                "email": self.email,
+                "password": self.password
+            }).json()
+            print(self.email)
+            print(self.password)
+            print(response)
+            if response["auth_token"]:
+                self.token = response["auth_token"]
+            else:
+                raise requests.RequestException(response)
+
         r.headers['Authorization'] = f'Token {self.token}'
         return r
