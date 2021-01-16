@@ -13,6 +13,7 @@ class ReplicationAdmin(admin.ModelAdmin):
     fields = ('id_auk',)
     # A handy constant for the name of the alternate database.
     using = 'mtdb'
+    containers = None
 
     def id_auk_link(self, obj: replicationauk):
         if obj:
@@ -21,7 +22,13 @@ class ReplicationAdmin(admin.ModelAdmin):
 href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
                 {escape(obj.id_auk)}</a>')
             elif obj.essence == 'container':
-                container = Container.objects.filter(auk_id=obj.id_auk).first()
+                if not self.containers:
+                    self.containers = [x for x in Container.objects.all()]
+                print(self.containers)
+                container = [
+                    x for x in self.containers if x.auk_id == obj.id_auk]
+                if container:
+                    container = container[0]
                 if not container:
                     return obj.id_auk
                 if container.auk_platform_id:
