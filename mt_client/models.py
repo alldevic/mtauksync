@@ -30,7 +30,7 @@ class replicationauk(models.Model):
     # AVG_ROW_LENGTH = 83,
     # CHARACTER SET utf8,
     # COLLATE utf8_general_ci;
-
+    id = models.BigIntegerField(primary_key=True)
     id_auk = models.BigIntegerField(null=True, default=None)
     id_mt = models.BigIntegerField(null=True, default=None)
     owner = models.CharField(

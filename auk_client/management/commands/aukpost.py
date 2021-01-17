@@ -29,9 +29,9 @@ class Command(BaseCommand):
             )
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
         platforms = [x for x in replicationauk.objects.using(
-            "mtdb").filter(owner="mt", essence="platform")]
+            "mtdb").all().filter(owner="mt", essence="platform")]
         containers = [x for x in replicationauk.objects.using(
-            "mtdb").filter(owner="mt", essence="container")]
+            "mtdb").all().filter(owner="mt", essence="container")]
 
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(
@@ -50,6 +50,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
+            replicationauk.objects.using("mtid").delete(id=x.id)
 
         for x in containers:
             if x.action == "create":
@@ -60,6 +61,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
+            replicationauk.objects.using("mtid").delete(id=x.id)
 
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(
