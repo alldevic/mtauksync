@@ -56,7 +56,8 @@ class PlatformAdmin(admin.ModelAdmin):
 
     def auk_id_link(self, obj: Platform):
         if obj:
-            return mark_safe(f'<a href="http://auk.kuzro.ru/platform/{obj.auk_id}">\
-                {escape(obj.auk_id)}</a>')
+            return mark_safe(f'<a target="_blank" \
+href="http://auk.kuzro.ru/platform/{obj.auk_id}">\
+{escape(obj.auk_id)}</a>')
         else:
             return None
