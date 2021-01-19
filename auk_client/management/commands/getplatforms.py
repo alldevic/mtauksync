@@ -1,5 +1,6 @@
 import time
 from datetime import datetime, timedelta
+from dateutil import tz
 
 import requests
 from auk_client.models import Platform
@@ -29,7 +30,7 @@ class Command(BaseCommand):
             )
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
         platforms = get_paged('http://apiauk.kuzro.ru/platforms/',
-                              "next", "results", last_task.lastrunned)
+                              "next", "results", last_task.lastrunned.replace(tzinfo=tz.gettz(settings.TIME_ZONE)))
 
         db_platforms = [Platform(auk_id=platform["id"],
                                  mt_id=platform["ext_id"],
