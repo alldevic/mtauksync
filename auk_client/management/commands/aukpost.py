@@ -93,9 +93,7 @@ class LogPassAuth(AuthBase):
                 "email": self.email,
                 "password": self.password
             }).json()
-            print(self.email)
-            print(self.password)
-            print(response)
+
             if response["auth_token"]:
                 self.token = response["auth_token"]
             else:
