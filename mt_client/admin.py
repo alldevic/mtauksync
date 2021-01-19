@@ -7,8 +7,9 @@ from mt_client.models import replicationauk
 
 @admin.register(replicationauk)
 class ReplicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_auk_link', 'id_mt', 'action', 'essence', 'dt',)
-    list_filter = ('action', 'essence',)
+    list_display = ('id', 'id_auk_link', 'id_mt',
+                    'action', 'essence', 'owner', 'dt',)
+    list_filter = ('action', 'essence', 'owner')
     search_fields = ('id_mt', 'id_auk',)
     fields = ('id_auk',)
     # A handy constant for the name of the alternate database.
@@ -24,7 +25,7 @@ href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
             elif obj.essence == 'container':
                 if not self.containers:
                     self.containers = [x for x in Container.objects.all()]
-                print(self.containers)
+
                 container = [
                     x for x in self.containers if x.auk_id == obj.id_auk]
                 if container:
@@ -34,7 +35,7 @@ href="http://auk.kuzro.ru/{obj.essence}/{obj.id_auk}">\
                 if container.auk_platform_id:
                     return mark_safe(f'<a target="_blank" \
 href="http://auk.kuzro.ru/platform/\
-    {container.auk_platform_id}/{container.auk_id}">{escape(obj.id_auk)}</a>')
+{container.auk_platform_id}/{container.auk_id}">{escape(obj.id_auk)}</a>')
                 else:
                     return obj.id_auk
             else:
