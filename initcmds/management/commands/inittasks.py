@@ -74,7 +74,7 @@ class Command(BaseCommand):
             task = Schedule.objects.get(name='auk_post')
             if settings.ENABLE_AUK_SYNC:
                 task.next_run = timezone.now()+timedelta(minutes=1)
-                if task.minutes != int(settings.AUK_PERID):
+                if task.minutes != int(settings.AUK_PERIOD):
                     task.minutes = int(settings.AUK_PERIOD)
                 task.save()
             else:
