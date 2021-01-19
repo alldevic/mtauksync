@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import requests
 from django.conf import settings
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         except:
             last_task = TaskModel.objects.create(
                 taskname="auk_post",
-                lastrunned=datetime.now() - timedelta(
+                lastrunned=timezone.now() - timedelta(
                     days=int(settings.FIRST_RUN_DAYS)
                 )
             )
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
-            x.delete()
+            replicationauk.objects.filter(id=x.id).delete()
 
         for x in containers:
             if x.action == "create":
@@ -61,7 +61,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
-            x.delete()
+            replicationauk.objects.filter(id=x.id).delete()
 
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(

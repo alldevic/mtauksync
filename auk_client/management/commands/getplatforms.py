@@ -24,7 +24,7 @@ class Command(BaseCommand):
         except:
             last_task = TaskModel.objects.create(
                 taskname="getplatforms",
-                lastrunned=datetime.now() - timedelta(
+                lastrunned=timezone.now() - timedelta(
                     days=int(settings.FIRST_RUN_DAYS)
                 )
             )
