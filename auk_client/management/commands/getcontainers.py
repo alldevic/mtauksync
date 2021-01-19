@@ -31,7 +31,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
 
         containers = get_paged('http://apiauk.kuzro.ru/containers/',
-                               "next", "results", last_task.lastrunned)
+                               "next", "results", last_task.lastrunned.replace(tzinfo=settings.TIME_ZONE))
 
         db_containers = [Container(auk_id=container["id"],
                                    mt_id=container["ext_id"],
