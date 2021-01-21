@@ -42,7 +42,7 @@ class Command(BaseCommand):
                              settings.AUK_LOGIN, settings.AUK_PASS)
 
         for x in platforms:
-            if x.action == "create":
+            if x.action == "insert":
                 s.post("http://apiauk.kuzro.ru/platforms/", json=x.attribute)
             elif x.action == "update":
                 s.patch(
