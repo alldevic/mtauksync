@@ -38,7 +38,8 @@ class Command(BaseCommand):
                                    mt_id=container["ext_id"],
                                    created=container["datetime_create"],
                                    updated=container["datetime_update"],
-                                   auk_platform_id=container["platform"]["id"],
+                                   # auk_platform_id=container["platform"]["id"],
+                                   auk_platform_id=None,
                                    raw_json=container)
                          for container in containers]
         elapsed = time.time()
