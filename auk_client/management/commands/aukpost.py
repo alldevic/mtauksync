@@ -50,7 +50,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
-            replicationauk.objects.filter(id=x.id).delete()
+            replicationauk.objects.using("mtdb").filter(id=x.id).delete()
 
         for x in containers:
             if x.action == "create":
@@ -61,7 +61,7 @@ class Command(BaseCommand):
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
-            replicationauk.objects.filter(id=x.id).delete()
+            replicationauk.objects.using("mtdb").filter(id=x.id).delete()
 
         elapsed = time.time()
         self.stdout.write(self.style.SUCCESS(
