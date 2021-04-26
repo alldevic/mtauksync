@@ -28,32 +28,56 @@ class Command(BaseCommand):
                     days=int(settings.FIRST_RUN_DAYS)
                 )
             )
-        self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
-        platforms = get_paged('http://apiauk.kuzro.ru/platforms/',
-                              "next", "results", last_task.lastrunned.replace(tzinfo=tz.gettz(settings.TIME_ZONE)))
+        
+        self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}, {last_task.status}'))
+        
+        if last_task.status is "p":
+            self.stdout.write(self.style.SUCCESS(
+                "--- Task already in progress ---"))
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- Total %s seconds ---" % (elapsed - start_time)))
+            return
+        
+        if last_task.status in ["s", "f"]:
+            last_task = TaskModel.objects.create(
+                taskname="auk_post",
+                lastrunned=start_date
+            )
 
-        db_platforms = [Platform(auk_id=platform["id"],
-                                 mt_id=platform["ext_id"],
-                                 created=platform["datetime_create"],
-                                 updated=platform["datetime_update"],
-                                 raw_json=platform)
-                        for platform in platforms]
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- %s seconds ---" % (elapsed - start_time)))
-        Platform.objects.bulk_create(db_platforms)
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- %s seconds ---" % (elapsed - start_time)))
+        last_task.status = "p"
+        last_task.save()
+        
+        try:
+            platforms = get_paged('http://apiauk.kuzro.ru/platforms/',
+                                "next", "results", last_task.lastrunned.replace(tzinfo=tz.gettz(settings.TIME_ZONE)))
 
-        TaskModel.objects.create(
-            taskname="getplatforms",
-            lastrunned=start_date
-        )
+            db_platforms = [Platform(auk_id=platform["id"],
+                                    mt_id=platform["ext_id"],
+                                    created=platform["datetime_create"],
+                                    updated=platform["datetime_update"],
+                                    raw_json=platform)
+                            for platform in platforms]
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- %s seconds ---" % (elapsed - start_time)))
+            Platform.objects.bulk_create(db_platforms)
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- %s seconds ---" % (elapsed - start_time)))
 
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- Total %s seconds ---" % (elapsed - start_time)))
+            last_task.status = "s"
+            last_task.save()
+        except BaseException as e:
+            last_task.status = "f"
+            last_task.save()
+            msg = str("\n".join(filter(None, map(str, list(e.args)))))
+            last_task.fail = msg
+            self.stdout.write(self.style.ERROR(msg))
+        finally:
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- Total %s seconds ---" % (elapsed - start_time)))
 
 
 def get_paged(url, next_field, data_field, upd_date):

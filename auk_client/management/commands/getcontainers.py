@@ -28,36 +28,58 @@ class Command(BaseCommand):
                 lastrunned=timezone.now() - timedelta(
                     days=int(settings.FIRST_RUN_DAYS))
             )
+        
+        self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}, {last_task.status}'))
+        
+        if last_task.status is "p":
+            self.stdout.write(self.style.SUCCESS(
+                "--- Task already in progress ---"))
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- Total %s seconds ---" % (elapsed - start_time)))
+            return
+        
+        if last_task.status in ["s", "f"]:
+            last_task = TaskModel.objects.create(
+                taskname="auk_post",
+                lastrunned=start_date
+            )
 
-        self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}'))
+        last_task.status = "p"
+        last_task.save()
 
-        containers = get_paged('http://apiauk.kuzro.ru/containers/',
-                               "next", "results", last_task.lastrunned.replace(tzinfo=tz.gettz(settings.TIME_ZONE)))
+        try:
+            containers = get_paged('http://apiauk.kuzro.ru/containers/',
+                                "next", "results", last_task.lastrunned.replace(tzinfo=tz.gettz(settings.TIME_ZONE)))
 
-        db_containers = [Container(auk_id=container["id"],
-                                   mt_id=container["ext_id"],
-                                   created=container["datetime_create"],
-                                   updated=container["datetime_update"],
-                                   # auk_platform_id=container["platform"]["id"],
-                                   auk_platform_id=None,
-                                   raw_json=container)
-                         for container in containers]
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- %s seconds ---" % (elapsed - start_time)))
-        Container.objects.bulk_create(db_containers)
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- %s seconds ---" % (elapsed - start_time)))
+            db_containers = [Container(auk_id=container["id"],
+                                    mt_id=container["ext_id"],
+                                    created=container["datetime_create"],
+                                    updated=container["datetime_update"],
+                                    # auk_platform_id=container["platform"]["id"],
+                                    auk_platform_id=None,
+                                    raw_json=container)
+                            for container in containers]
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- %s seconds ---" % (elapsed - start_time)))
+            Container.objects.bulk_create(db_containers)
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- %s seconds ---" % (elapsed - start_time)))
 
-        TaskModel.objects.create(
-            taskname="getcontainers",
-            lastrunned=start_date
-        )
-
-        elapsed = time.time()
-        self.stdout.write(self.style.SUCCESS(
-            "--- Total %s seconds ---" % (elapsed - start_time)))
+            last_task.status = "s"
+            last_task.save()
+        except BaseException as e:
+            last_task.status = "f"
+            last_task.save()
+            msg = str("\n".join(filter(None, map(str, list(e.args)))))
+            last_task.fail = msg
+            self.stdout.write(self.style.ERROR(msg))
+        finally:
+            elapsed = time.time()
+            self.stdout.write(self.style.SUCCESS(
+                "--- Total %s seconds ---" % (elapsed - start_time)))
 
 
 def get_paged(url, next_field, data_field, upd_date):
