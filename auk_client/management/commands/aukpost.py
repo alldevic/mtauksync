@@ -42,25 +42,38 @@ class Command(BaseCommand):
                              settings.AUK_LOGIN, settings.AUK_PASS)
 
         for x in platforms:
+            res = None
             if x.action == "insert":
-                s.post("http://apiauk.kuzro.ru/platforms/", json=x.attribute)
+                res = s.post("http://apiauk.kuzro.ru/platforms/", json=x.attribute)
             elif x.action == "update":
-                s.patch(
+                res = s.patch(
                     f"http://apiauk.kuzro.ru/platforms/{x.id_auk}/",
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
+
+            if res:
+                if res.status_code != 200:
+                    print(f"{res.status_code} -- {res.content}")
+
             replicationauk.objects.using("mtdb").filter(id=x.id).delete()
 
         for x in containers:
+            res = None
             if x.action == "create":
-                s.post("http://apiauk.kuzro.ru/containers/", json=x.attribute)
+                res = s.post("http://apiauk.kuzro.ru/containers/", json=x.attribute)
             elif x.action == "update":
-                s.patch(
+                res = s.patch(
                     f"http://apiauk.kuzro.ru/containers/{x.id_auk}/",
                     json=x.attribute)
             elif x.action == "delete":
                 print("Not implemented")
+
+            if res:
+                if res.status_code != 200:
+                    print(f"{res.status_code} -- {res.content}")
+
+            replicationauk.objects.using("mtdb").filter(id=x.id).delete()
             replicationauk.objects.using("mtdb").filter(id=x.id).delete()
 
         elapsed = time.time()
