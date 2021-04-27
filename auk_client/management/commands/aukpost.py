@@ -72,7 +72,7 @@ class Command(BaseCommand):
                 elif str(x.action) is "delete":
                     print("Not implemented")
                 else:
-                    print("Unknown method")
+                    print(f"Unknown method: {x.action}")
 
 
                 if res:
