@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}, {last_task.status}'))
         
-        if last_task.status is "p":
+        if last_task.status == "p":
             self.stdout.write(self.style.SUCCESS(
                 "--- Task already in progress ---"))
             elapsed = time.time()
@@ -65,11 +65,11 @@ class Command(BaseCommand):
                 res = None
                 if str(x.action) in ["insert", "create"]:
                     res = s.post("http://apiauk.kuzro.ru/platforms/", json=x.attribute)
-                elif str(x.action) is "update":
+                elif str(x.action) == "update":
                     res = s.patch(
                         f"http://apiauk.kuzro.ru/platforms/{x.id_auk}/",
                         json=x.attribute)
-                elif str(x.action) is "delete":
+                elif str(x.action) == "delete":
                     print("Not implemented")
                 else:
                     print(f"Unknown method: {x.action}")
@@ -85,11 +85,11 @@ class Command(BaseCommand):
                 res = None
                 if str(x.action) in ["insert", "create"]:
                     res = s.post("http://apiauk.kuzro.ru/containers/", json=x.attribute)
-                elif str(x.action) is "update":
+                elif str(x.action) == "update":
                     res = s.patch(
                         f"http://apiauk.kuzro.ru/containers/{x.id_auk}/",
                         json=x.attribute)
-                elif str(x.action) is "delete":
+                elif str(x.action) == "delete":
                     print("Not implemented")
                 else:
                     print(f"Unknown method: {x.action}")
