@@ -31,7 +31,7 @@ class Command(BaseCommand):
         
         self.stdout.write(self.style.SUCCESS(f'Last task: {last_task}, {last_task.status}'))
         
-        if last_task.status is "p":
+        if last_task.status == "p":
             self.stdout.write(self.style.SUCCESS(
                 "--- Task already in progress ---"))
             elapsed = time.time()
