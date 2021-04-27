@@ -63,14 +63,17 @@ class Command(BaseCommand):
         try:
             for x in platforms:
                 res = None
-                if x.action == "insert":
+                if str(x.action) in ["insert", "create"]:
                     res = s.post("http://apiauk.kuzro.ru/platforms/", json=x.attribute)
-                elif x.action == "update":
+                elif str(x.action) is "update":
                     res = s.patch(
                         f"http://apiauk.kuzro.ru/platforms/{x.id_auk}/",
                         json=x.attribute)
-                elif x.action == "delete":
+                elif str(x.action) is "delete":
                     print("Not implemented")
+                else:
+                    print("Unknown method")
+
 
                 if res:
                     if res.status_code != 200:
@@ -80,14 +83,17 @@ class Command(BaseCommand):
 
             for x in containers:
                 res = None
-                if x.action == "create":
+                if str(x.action) in ["insert", "create"]:
                     res = s.post("http://apiauk.kuzro.ru/containers/", json=x.attribute)
-                elif x.action == "update":
+                elif str(x.action) is "update":
                     res = s.patch(
                         f"http://apiauk.kuzro.ru/containers/{x.id_auk}/",
                         json=x.attribute)
-                elif x.action == "delete":
+                elif str(x.action) is "delete":
                     print("Not implemented")
+                else:
+                    print("Unknown method")
+
 
                 if res:
                     if res.status_code != 200:
