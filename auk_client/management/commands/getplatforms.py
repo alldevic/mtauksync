@@ -41,7 +41,7 @@ class Command(BaseCommand):
         
         if last_task.status in ["s", "f"]:
             last_task = TaskModel.objects.create(
-                taskname="auk_post",
+                taskname="getplatforms",
                 lastrunned=start_date
             )
 
